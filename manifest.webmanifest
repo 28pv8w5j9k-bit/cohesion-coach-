@@ -1,0 +1,17 @@
+{
+  "name": "Cohesion Coach",
+  "short_name": "Cohesion Coach",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f6f7fb",
+  "theme_color": "#4f46e5",
+  "description": "Mobile writing trainer for cohesion, coherence and clarity.",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#4f46e5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Cohesion Coach">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Cohesion Coach</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--ink:#171b2d;--muted:#6b7280;--line:#e5e7eb;--a:#4f46e5;--a2:#0f9f83;--bad:#b42318;--good:#137a4a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:90px}
+header{padding:calc(20px + env(safe-area-inset-top)) 18px 20px;background:linear-gradient(145deg,#24205d,#5b57df);color:#fff}header h1{margin:0;font-size:28px}header p{margin:5px 0 0;opacity:.9}
+main{max-width:760px;margin:auto;padding:16px}.screen{display:none}.screen.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px;box-shadow:0 4px 18px rgba(20,25,50,.05)}
+h2{font-size:21px;margin:0 0 8px}h3{margin:12px 0 6px}.muted{color:var(--muted);font-size:14px}
+button{font:inherit;font-weight:750;border:0;border-radius:12px;padding:12px 15px;background:var(--a);color:#fff;min-height:44px;cursor:pointer}.secondary{background:#ececff;color:#3936a3}.green{background:var(--a2)}.full{width:100%}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:7px 5px calc(7px + env(safe-area-inset-bottom));z-index:10}.nav{background:none;color:#697085;padding:7px 2px;font-size:12px}.nav.active{color:var(--a)}
+.stat{font-size:28px;font-weight:850;color:var(--a)}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:#eeefff;color:#3936a3;font-size:12px;font-weight:800;margin:3px}
+.device{border-left:4px solid var(--a);background:#fafaff;padding:11px 13px;border-radius:9px;margin:8px 0}.device b{display:block}
+.option{border:1px solid var(--line);border-radius:12px;padding:13px;margin:9px 0;background:#fff}.option.correct{border-color:var(--good);background:#edfff5}.option.wrong{border-color:var(--bad);background:#fff2f0}
+textarea,input{width:100%;font:inherit;border:1px solid #cfd4df;border-radius:12px;padding:12px;background:#fff}textarea{min-height:190px;resize:vertical}
+.feedback{margin-top:12px;background:#f4f6fa;border-radius:12px;padding:13px}.feedback.good{background:#edfff5}.feedback.bad{background:#fff2f0}
+.progress{height:9px;background:#e8eaf0;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;background:var(--a);width:0}
+.task{background:#f8f8ff;border:1px dashed #b9b8f0;padding:13px;border-radius:12px;margin:12px 0}
+</style>
+</head>
+<body>
+<header><h1>Cohesion Coach</h1><p>Halliday & Hasan × Pinker — write so the reader never loses the thread.</p></header>
+<main>
+<section id="home" class="screen active">
+<div class="card"><h2>Your writing mission</h2><p>Build cohesion deliberately, then edit for clarity. <b>More connectors ≠ better writing.</b></p><button class="full" onclick="go('train')">Start today's training</button></div>
+<div class="grid">
+<div class="card"><div class="stat" id="sessions">0</div><div class="muted">sessions</div></div>
+<div class="card"><div class="stat" id="mastery">0%</div><div class="muted">trainer mastery</div></div>
+</div>
+<div class="card"><h2>Six things to master</h2>
+<span class="pill">Reference</span><span class="pill">Substitution</span><span class="pill">Ellipsis</span><span class="pill">Conjunction</span><span class="pill">Lexical cohesion</span><span class="pill">Coherence</span>
+<p class="muted">Then apply them at sentence, paragraph and essay level.</p></div>
+</section>
+
+<section id="map" class="screen">
+<div class="card"><h2>Cohesion map</h2>
+<div class="device"><b>Reference</b> this, that, it, they, such, which — point the reader back to an identifiable idea.</div>
+<div class="device"><b>Substitution</b> one/ones, do, so, the same — replace an item without repeating it.</div>
+<div class="device"><b>Ellipsis</b> leave recoverable material unsaid: “Maria chose the red folder; James, the blue one.”</div>
+<div class="device"><b>Conjunction</b> show relations such as contrast, cause, result, addition, time and example.</div>
+<div class="device"><b>Lexical cohesion</b> maintain the semantic field through repetition, synonymy, superordinates and collocation.</div>
+<h3>Coherence check</h3><p>A paragraph can be highly cohesive yet incoherent. Ask: <b>Does each sentence develop the controlling idea, and does the reader know why this sentence comes next?</b></p>
+</div>
+</section>
+
+<section id="train" class="screen">
+<div class="card"><h2>Adaptive trainer</h2><div id="q"></div><button onclick="next()">Next</button> <button class="secondary" onclick="reset()">Restart</button>
+<p class="muted" id="qmeta"></p><div class="progress"><i id="bar"></i></div></div>
+</section>
+
+<section id="write" class="screen">
+<div class="card"><h2>Paragraph lab</h2><p class="muted">Write 120–180 words. The coach will look for useful cohesion and clarity signals.</p>
+<textarea id="text" placeholder="Topic: Should universities require students to attend lectures?"></textarea>
+<br><br><button onclick="diagnose()">Diagnose</button> <button class="green" onclick="challenge()">Revision challenge</button>
+<div id="diag"></div></div>
+<div class="card"><h2>Pinker edit</h2>
+<div class="task"><b>Agent test</b><br>Can you identify who performs the main action in every sentence?</div>
+<div class="task"><b>Verb test</b><br>Can a weak phrase such as “make a reduction in” become a direct verb such as “reduce”?</div>
+<div class="task"><b>Reader test</b><br>For every “this / it / they / which”, point to exactly what it refers to.</div>
+</div>
+</section>
+
+<section id="essay" class="screen">
+<div class="card"><h2>Essay architect</h2><p class="muted">Plan the argument before you decorate it with transitions.</p>
+<label><b>Essay question / thesis</b></label><input id="thesis" placeholder="What are you arguing?">
+<div class="task"><b>Paragraph 1</b><textarea id="e1" placeholder="Claim → explanation → evidence → interpretation → bridge"></textarea></div>
+<div class="task"><b>Paragraph 2</b><textarea id="e2" placeholder="Claim → explanation → evidence → interpretation → bridge"></textarea></div>
+<div class="task"><b>Paragraph 3</b><textarea id="e3" placeholder="Claim → explanation → evidence → interpretation → bridge"></textarea></div>
+<div class="task"><b>Conclusion</b><textarea id="ec" placeholder="Answer the question at a higher level; do not merely repeat the introduction."></textarea></div>
+<button onclick="essayCheck()">Check flow</button><div id="eres"></div></div>
+</section>
+</main>
+<nav class="bottom">
+<button class="nav active" data-go="home">⌂<br>Home</button>
+<button class="nav" data-go="map">◈<br>Map</button>
+<button class="nav" data-go="train">✓<br>Train</button>
+<button class="nav" data-go="write">✎<br>Write</button>
+</nav>
+<script>
+const questions=[
+["Reference","“The university introduced a new attendance policy. ___ was unpopular with many students.”",["It","They","Those","One"],0,"“It” refers back to the singular policy."],
+["Substitution","“I prefer the blue option, and Maya prefers the green ___.”",["it","one","so","do"],1,"“One” substitutes for the previously mentioned type of option."],
+["Ellipsis","“Some students attended online; others ___ in person.”",["did","were","those","however"],0,"“Did” stands for the recoverable verb phrase “attended online/in person” in the coordinated structure."],
+["Conjunction","“The evidence is limited. ___, the finding deserves further study.”",["However","For example","Similarly","First"],0,"The second sentence contrasts with the limitation."],
+["Lexical cohesion","Which sequence keeps one semantic field alive most effectively?",["policy → measure → reform → regulation","policy → guitar → window → bicycle","policy → orange → Tuesday → swimming","policy → neighbour → weather → coffee"],0,"The words form a coherent lexical chain around the same topic."],
+["Coherence","A paragraph contains “however”, “therefore”, “moreover” and “consequently”, but its ideas still jump. What is missing?",["More connectors","Coherent logical progression","More pronouns","Longer sentences"],1,"Cohesive markers cannot manufacture an argument that is not logically organised."],
+["Pinker","Which is clearest?",["The implementation of the policy resulted in a reduction in congestion.","The policy reduced congestion.","A reduction in congestion was resultant from implementation.","Congestion reduction was something that happened."],1,"The direct subject + verb makes the action immediately visible."],
+["Information flow","Which is the strongest paragraph sequence?",["claim → explanation → evidence → interpretation → bridge","connector → connector → evidence → connector","evidence → unrelated example → claim → conclusion","new topic → new topic → evidence → thesis"],0,"Readers can follow a controlled progression from point to support to meaning."],
+["Reference precision","Which sentence creates the biggest ambiguity?",["The council rejected the proposal because it was too expensive.","The council rejected the proposal because the proposal was too expensive.","The council rejected the proposal after the finance committee reviewed the costs.","The council rejected the expensive proposal."],0,"“It” could grammatically point to the council or proposal; precise reference matters."],
+["Lexical choice","What is the best reason to repeat a key noun sometimes?",["Repetition is always bad.","It can keep the topic visible and reduce ambiguity.","It makes writing more academic.","It replaces the need for logic."],1,"Controlled repetition can strengthen lexical cohesion and reader tracking."]
+];
+let idx=0,score=0,done=0,weak={};
+function render(){let x=questions[idx];document.getElementById("q").innerHTML=`<p class="muted">Question ${idx+1} of ${questions.length} · ${x[0]}</p><h3>${x[1]}</h3>${x[2].map((v,i)=>`<div class="option" onclick="answer(${i})">${v}</div>`).join("")}<div id="feedback"></div>`;document.getElementById("qmeta").textContent=`Current score: ${score}/${done}`;document.getElementById("bar").style.width=(idx/questions.length*100)+"%"}
+function answer(i){if(document.querySelector("#feedback").dataset.done)return;let x=questions[idx], ok=i===x[3];document.querySelectorAll(".option").forEach((o,n)=>{if(n===x[3])o.classList.add("correct");if(n===i&&!ok)o.classList.add("wrong")});if(ok)score++;else weak[x[0]]=(weak[x[0]]||0)+1;done++;document.querySelector("#feedback").dataset.done="1";document.querySelector("#feedback").innerHTML=`<div class="feedback ${ok?"good":"bad"}"><b>${ok?"Correct":"Not quite"}</b> — ${x[4]}</div>`;document.getElementById("qmeta").textContent=`Current score: ${score}/${done}`}
+function next(){if(idx<questions.length-1){idx++;render()}else{let pct=Math.round(score/questions.length*100);localStorage.setItem("mastery",pct);localStorage.setItem("sessions",(+localStorage.getItem("sessions")||0)+1);alert(`Session complete: ${score}/${questions.length} (${pct}%).`);idx=0;score=0;done=0;render();stats()}}
+function reset(){idx=0;score=0;done=0;render()}
+function stats(){document.getElementById("sessions").textContent=localStorage.getItem("sessions")||0;document.getElementById("mastery").textContent=(localStorage.getItem("mastery")||0)+"%"}
+function diagnose(){let t=document.getElementById("text").value.trim();if(!t){diag.innerHTML='<div class="feedback bad">Write something first.</div>';return}let words=t.split(/\s+/).filter(Boolean), sentences=t.split(/[.!?]+/).filter(s=>s.trim()), lower=t.toLowerCase();let ref=(lower.match(/\b(this|that|these|those|it|they|them|their|which|who|such)\b/g)||[]).length, conj=(lower.match(/\b(however|therefore|thus|although|because|while|also|moreover|furthermore|for example|for instance|in addition|instead|consequently|nevertheless|yet)\b/g)||[]).length, nom=(lower.match(/\b(tion|ment|ness|ity|ance|ence)\b/g)||[]).length;let avg=(words.length/Math.max(1,sentences.length)).toFixed(1);let tips=[];tips.push(ref?`You have ${ref} visible reference item(s). Test each one for a precise antecedent.`:"Try one or two precise reference ties where they genuinely help tracking.");tips.push(conj?`You use ${conj} explicit connector(s). Explain the exact relationship each one signals.`:"No obvious explicit connectors. Add one only if the relationship is not already clear from sentence order.");tips.push(avg>28?`Average sentence length is ${avg} words. Inspect the longest sentences for overloaded ideas.`:`Average sentence length is ${avg} words. Still check whether each sentence has one dominant action.`);tips.push("Pinker edit: replace at least one abstract noun phrase with a concrete subject + strong verb.");diag.innerHTML=`<div class="feedback"><b>${words.length} words · ${sentences.length} sentences · ${avg} words/sentence</b><ul>${tips.map(x=>`<li>${x}</li>`).join("")}</ul><b>Next:</b> rewrite one sentence so that its subject tells the reader who is doing what.</div>`}
+function challenge(){let a=["Find every this/it/they/which and label its antecedent.","Remove one connector. Can the sentence order itself make the relationship clear?","Create a lexical chain around your key concept using repetition, a near-synonym and a more specific term.","Rewrite your longest sentence using a concrete subject and a strong verb.","Add a final sentence that explains why your evidence matters."];alert(a[Math.floor(Math.random()*a.length)])}
+function essayCheck(){let vals=["thesis","e1","e2","e3","ec"].map(x=>document.getElementById(x).value.trim()), issues=[];if(!vals[0])issues.push("Write the thesis first.");if(vals.slice(1).filter(Boolean).length<3)issues.push("Draft at least three structural moves before judging the flow.");issues.push("Read only the first sentence/claim of each paragraph. Do they form a logical sequence answering the thesis?");issues.push("For each paragraph, write a one-line bridge explaining why the next paragraph follows.");issues.push("Use connectors as signposts, not as substitutes for reasoning.");eres.innerHTML=`<div class="feedback"><ul>${issues.map(x=>`<li>${x}</li>`).join("")}</ul></div>`}
+function go(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".nav").forEach(n=>n.classList.toggle("active",n.dataset.go===id));scrollTo(0,0)}
+document.querySelectorAll(".nav").forEach(n=>n.onclick=()=>go(n.dataset.go));render();stats();
+if("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+</script>
+</body>
+</html>
